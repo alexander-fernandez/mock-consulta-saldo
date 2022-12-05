@@ -1,0 +1,46 @@
+metadata:
+  name: mock-consulta-saldo
+  labels:
+    app: mock-consulta-saldo
+    app.kubernetes.io/component: Mock
+    app.kubernetes.io/part-of: piloto-colombia
+spec:
+  template:
+    spec:
+      volumes:
+        - name: mock-consulta-saldo-logback-configmap
+          configMap:
+            name: mock-consulta-saldo-logback-configmap
+            defaultMode: 420
+      containers:
+        - name: spring-boot
+          volumeMounts:
+            - name: mock-consulta-saldo-logback-configmap
+              readOnly: true
+              mountPath: /etc/config
+          resources:
+            requests:
+              cpu: 200m
+              memory: 300Mi
+            limits:
+              cpu: 300m
+              memory: 600Mi
+          env:
+          - name: TZ
+            value: America/Bogota
+          - name: JAVA_OPTIONS
+            value: '-Xms256m -Xmx512m -XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Djava.util.concurrent.ForkJoinPool.common.parallelism=1 -cp .'            
+          - name: SPRING_APPLICATION_JSON
+            value: '{"server":{"undertow":{"io-threads":1, "worker-threads":32 }}}'
+# LOGGING
+          - name: LOGGING_CONFIG
+            valueFrom:
+              configMapKeyRef:
+                name: mock-consulta-saldo-configmap
+                key: logging.config
+# URL KAFKA
+          - name: CAMEL_COMPONENT_KAFKA_BROKERS
+            valueFrom:
+              configMapKeyRef:
+                name: mock-consulta-saldo-configmap
+                key: camel.component.kafka.brokers

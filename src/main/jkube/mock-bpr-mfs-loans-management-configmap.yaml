@@ -1,0 +1,7 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mock-consulta-saldo-configmap
+data:
+  logging.config: /etc/config/logback.xml
+  camel.component.kafka.brokers: kafka-test-kafka-brokers:9092

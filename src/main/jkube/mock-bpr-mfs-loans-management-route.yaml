@@ -1,0 +1,12 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: mock-consulta-saldo
+spec:
+  to:
+    kind: Service
+    name: mock-consulta-saldo
+    weight: 100
+  port:
+    targetPort: 8080
+  wildcardPolicy: None

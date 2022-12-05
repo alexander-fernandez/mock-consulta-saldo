@@ -1,0 +1,48 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,camelroutes
+    enabled-by-default: 'true'
+  server:
+    port: '8080'
+  security:
+    enabled: false
+camel:
+  servlet:
+    mapping:
+      context-path: /api/*
+      servlet-name: CamelServlet
+      enabled: 'true'
+  springboot:
+    name: mock-consulta-saldo
+    main-run-controller: 'true'
+    jmx-enabled: 'true'
+  component:
+    kafka:
+      group-id: claro-piloto
+      client-id: mock-consulta-saldo
+      consumers-count: 1
+      auto-offset-reset: earliest
+      brokers: localhost:9092
+
+server:
+  port: 8080
+
+topic: claro-topic
+kafka.uri: kafka:{{topic}}
+camelComponent: servlet
+
+# configure enterprise dispatcher module context path for servlet
+mock:
+  api:
+    path: /api
+    enableCors: true
+  api-docs:
+    path: /api-docs
+    version: 1.0.0
+    title: mock-consulta-saldo
+
+# #logging configuration path
+logging:
+  config: classpath:logback.xml
